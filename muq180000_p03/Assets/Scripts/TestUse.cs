@@ -27,7 +27,7 @@ public class TestUse : MonoBehaviour
     Vector3 mousePos, originalMousePos;
     bool builtSoundPlayed, completeSoundPlayed, particlePlayed;
 
-    public ParticleSystem particleSystem;
+    public ParticleSystem particleSystem, particleSystemUsed;
 
     // Start is called before the first frame update
     void Start()
@@ -120,7 +120,7 @@ public class TestUse : MonoBehaviour
             }
             if (!particlePlayed)
             {
-                particleSystem.Play();
+                particleSystemUsed.Play();
                 particlePlayed = true;
             }
         }
@@ -132,7 +132,8 @@ public class TestUse : MonoBehaviour
         GameObject newCrate = Instantiate(crateSprite, position-new Vector3(1.5f,1.5f,0), new Quaternion(0,0,0,0));
         villager.nextSpot = position;
         villager.canGo = true;
-        particleSystem.transform.position = position;
+        particleSystemUsed = Instantiate(particleSystem, position, Quaternion.identity);
+        //particleSystem.transform.position = position;
         loadBar.SetActive(true);
         if (loadBar.activeSelf)
         {
