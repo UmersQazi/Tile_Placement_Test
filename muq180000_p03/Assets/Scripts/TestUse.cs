@@ -22,6 +22,10 @@ public class TestUse : MonoBehaviour
     GameObject spriteToBuild;
     GameObject crateToEnd;
     public Villager villager;
+
+    public AudioSource moveSound, buildingSound, buildingCompleteSound;
+    Vector3 mousePos, originalMousePos;
+    bool builtSoundPlayed, completeSoundPlayed;
     // Start is called before the first frame update
     void Start()
     {
@@ -29,11 +33,16 @@ public class TestUse : MonoBehaviour
         grid = new Grid(width, height, cellSize, origin, square);
         clicked = false;
         orignalSprite = mouseSprite;
+        originalMousePos = mousePos;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(mousePos != originalMousePos)
+        {
+            //moveSound.Play();
+        }
         mousePosition = UtilsClass.GetMouseWorldPosition();
         roundedMousePos = grid.GetValue(mousePosition);
         if(!clicked)
@@ -42,6 +51,11 @@ public class TestUse : MonoBehaviour
         {
             if (grid.GetValue(mousePosition) == 0 && mouseSprite == orignalSprite)
             {
+                if (!builtSoundPlayed)
+                {
+                    buildingSound.Play();
+                    builtSoundPlayed = true;
+                }
                  spriteToBuild = mouseSprite;
                 grid.SetValue(mousePosition, 1);
                 clicked = true;
@@ -55,6 +69,13 @@ public class TestUse : MonoBehaviour
             }
             if(grid.GetValue(mousePosition) == 0 && mouseSprite == mouseSprite2)
             {
+                if (builtSoundPlayed)
+                {
+                    buildingSound.Play();
+                    builtSoundPlayed = false;
+                }
+                completeSoundPlayed = false;
+                //buildingSound.Play();
                 spriteToBuild = mouseSprite;
                 spriteToBuild.SetActive(false);
                 grid.SetValue(mousePosition, 1);
@@ -88,6 +109,11 @@ public class TestUse : MonoBehaviour
             Debug.Log("Turned off loading!");
             spriteToBuild.SetActive(true);
             crateToEnd.SetActive(false);
+            if (!completeSoundPlayed)
+            {
+                buildingCompleteSound.Play();
+                completeSoundPlayed = true;
+            }
         }
     }
 
@@ -116,6 +142,7 @@ public class TestUse : MonoBehaviour
     public void MoveSprite()
     {
         int x, y;
+        //moveSound.Play();
         grid.GetXY(mousePosition, out x, out y);
         //If i need it off center, remove .5 increments
         mouseSprite.transform.position = new Vector3(x, y, 0)*cellSize + origin;
