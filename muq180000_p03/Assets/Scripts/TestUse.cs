@@ -25,7 +25,10 @@ public class TestUse : MonoBehaviour
 
     public AudioSource moveSound, buildingSound, buildingCompleteSound;
     Vector3 mousePos, originalMousePos;
-    bool builtSoundPlayed, completeSoundPlayed;
+    bool builtSoundPlayed, completeSoundPlayed, particlePlayed;
+
+    public ParticleSystem particleSystem;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -69,6 +72,7 @@ public class TestUse : MonoBehaviour
             }
             if(grid.GetValue(mousePosition) == 0 && mouseSprite == mouseSprite2)
             {
+                particlePlayed = false;
                 if (builtSoundPlayed)
                 {
                     buildingSound.Play();
@@ -114,6 +118,11 @@ public class TestUse : MonoBehaviour
                 buildingCompleteSound.Play();
                 completeSoundPlayed = true;
             }
+            if (!particlePlayed)
+            {
+                particleSystem.Play();
+                particlePlayed = true;
+            }
         }
     }
 
@@ -123,6 +132,7 @@ public class TestUse : MonoBehaviour
         GameObject newCrate = Instantiate(crateSprite, position-new Vector3(1.5f,1.5f,0), new Quaternion(0,0,0,0));
         villager.nextSpot = position;
         villager.canGo = true;
+        particleSystem.transform.position = position;
         loadBar.SetActive(true);
         if (loadBar.activeSelf)
         {
