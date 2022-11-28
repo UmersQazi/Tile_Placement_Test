@@ -44,7 +44,8 @@ public class TestUse : MonoBehaviour
     {
         if(mousePos != originalMousePos)
         {
-            //moveSound.Play();
+            originalMousePos = mousePos;
+            moveSound.Play();
         }
         mousePosition = UtilsClass.GetMouseWorldPosition();
         roundedMousePos = grid.GetValue(mousePosition);
